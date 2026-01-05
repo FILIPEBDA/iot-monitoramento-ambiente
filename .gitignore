@@ -1,0 +1,13 @@
+# Volumes Docker (dados gerados em runtime)
+volumes/
+
+# Arquivos Python
+__pycache__/
+*.pyc
+
+# Variáveis de ambiente
+.env
+
+# Logs
+*.log
+
