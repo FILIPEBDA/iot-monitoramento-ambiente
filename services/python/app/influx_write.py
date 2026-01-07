@@ -5,26 +5,35 @@ INFLUX_HOST = "influxdb"
 INFLUX_PORT = 8086
 INFLUX_DB = "umidade"
 
-client = InfluxDBClient(
-    host=INFLUX_HOST,
-    port=INFLUX_PORT
-)
+def get_influx_client():
+    for attempt in range(10):
+        try:
+            client = InfluxDBClient(
+                host=INFLUX_HOST,
+                port=INFLUX_PORT
+            )
+            client.create_database(INFLUX_DB)
+            client.switch_database(INFLUX_DB)
+            print("Conectado ao InfluxDB")
+            return client
+        except Exception:
+            print("Aguardando InfluxDB...")
+            time.sleep(3)
 
-# Cria o banco se não existir
-client.create_database(INFLUX_DB)
-client.switch_database(INFLUX_DB)
+    raise Exception("InfluxDB indisponível")
+
+client = get_influx_client()
 
 def write_to_influx(dados):
     json_body = [
         {
-            "measurement": "ambiente",
+            "measurement": "umidade",
             "tags": {
-                "device": dados["device_id"]
+                "device_id": dados["device_id"]
             },
-            "time": int(time.time() * 1000),  # timestamp opcional
             "fields": {
-                "temperature": float(dados["temperature"]),
-                "humidity": float(dados["humidity"])
+                "temperature": dados["temperature"],
+                "humidity": dados["humidity"]
             }
         }
     ]
