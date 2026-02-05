@@ -79,6 +79,7 @@ services:
   python:
     container_name: python-iot
     build: ./services/python
+    command: ["python","main.py"]
     restart: unless-stopped
     environment:
       - TZ=${TZ:-America/Sao_Paulo}

@@ -28,10 +28,10 @@ def on_message(client, userdata, msg):
         print("Erro ao processar mensagem MQTT:", e)
 
 
-client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-client.on_connect = on_connect
-client.on_message = on_message
-
-client.connect(MQTT_BROKER, MQTT_PORT, 60)
-client.loop_forever()
+def start_mqtt():
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    client.loop_start()
 

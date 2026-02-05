@@ -16,8 +16,8 @@ def get_influx_client():
             client.switch_database(INFLUX_DB)
             print("Conectado ao InfluxDB")
             return client
-        except Exception as e:
-            print("Aguardando InfluxDB...", e)
+        except Exception:
+            print("Aguardando InfluxDB...")
             time.sleep(3)
 
     raise Exception("InfluxDB indisponível")
@@ -39,4 +39,5 @@ def write_to_influx(dados):
     ]
 
     client.write_points(json_body)
+
 

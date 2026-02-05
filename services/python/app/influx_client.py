@@ -39,4 +39,3 @@ def write_to_influx(dados):
     ]
 
     client.write_points(json_body)
-
