@@ -15,10 +15,15 @@ def start_mqtt(client_influx):
     def on_message(client, userdata, msg):
         try:
             payload = json.loads(msg.payload.decode())
-            write_to_influx(client_influx, payload)
-            print("Dados gravados no InfluxDB")
+            ok = write_to_influx(client_influx, payload)
+
+            if ok:
+                print("Dados gravados no InfluxDB")
+            else:
+                print("Salvo no buffer")
+
         except Exception as e:
-            print("Erro ao gravar:", e)
+            print("Erro ao processar mensagem:", e)
 
     client = mqtt.Client()
     client.on_connect = on_connect
@@ -27,6 +32,6 @@ def start_mqtt(client_influx):
     print("Conectando ao broker MQTT...")
     client.connect(MQTT_BROKER, MQTT_PORT, 60)
 
-    # BLOQUEIA O PROCESSO (mantém vivo)
+    # Mantém o processo vivo
     client.loop_forever()
 
